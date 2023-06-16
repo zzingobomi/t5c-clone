@@ -28,6 +28,9 @@ module.exports = {
         exclude: /node_modules/,
         use: {
           loader: "ts-loader",
+          options: {
+            //sourceMap: true,
+          },
         },
       },
     ],
@@ -36,6 +39,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: "public/", to: "./" }],
     }),
+    //new BundleAnalyzerPlugin()
   ],
   mode: "development",
 };

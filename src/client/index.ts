@@ -1,3 +1,5 @@
+import "@babylonjs/loaders/glTF/2.0/glTFLoader";
+
 import { Engine, Scene } from "@babylonjs/core";
 
 // IMPORT SCREEN
@@ -5,6 +7,8 @@ import State from "./Screens/Screens";
 import { Loading } from "./Controllers/Loading";
 import { LoginScene } from "./Screens/LoginScene";
 import { GameScene } from "./Screens/GameScene";
+
+import Config from "../shared/Config";
 
 class App {
   // babylon
@@ -77,7 +81,7 @@ class App {
 
   setDefault() {
     global.T5C = {
-      nextScene: State.LOGIN,
+      nextScene: Config.defaultScene,
     };
   }
 
