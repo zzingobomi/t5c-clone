@@ -10,12 +10,14 @@ import {
 import { Player } from "../../shared/Entities/Player";
 import { Environment } from "../Controllers/Environment";
 import { LocationsDB } from "../../shared/Data/LocationsDB";
+import { Room } from "colyseus.js";
 
 export class GameScene {
   private _app;
   private _scene: Scene;
   private _environment: Environment;
 
+  private room: Room<any>;
   private _currentPlayer: Player;
   private _loadedAssets: AssetContainer[] = [];
 
@@ -72,18 +74,47 @@ export class GameScene {
     // load the rest
     this._app.engine.displayLoadingUI();
     await this._initNetwork();
-
-    // Player test
-    //const player = new Player(this._scene);
-    //this._currentPlayer = player;
-
-    //this._app.engine.hideLoadingUI();
   }
 
   private async _initNetwork(): Promise<void> {
     try {
+      const room = await this._app.client.findCurrentRoom("lh_town");
+      if (room) {
+        // join game room
+        this.room = await this._app.client.joinRoom(room.roomId);
+
+        await this._initEvents();
+      }
     } catch (e) {
       alert("Failed to connect.");
     }
+  }
+
+  private async _initEvents() {
+    ////////////////////////////////////////////////////
+    //  when a entity joins the room event
+    this.room.state.players.onAdd((entity, sessionId) => {
+      const isCurrentPlayer = sessionId === this.room.sessionId;
+
+      //////////////////
+      // if player type
+      if (isCurrentPlayer) {
+        // create player entity
+        const _player = new Player(
+          entity,
+          this.room,
+          this._scene,
+          this._loadedAssets
+        );
+
+        this._currentPlayer = _player;
+
+        this._app.engine.hideLoadingUI();
+      }
+      //////////////////
+      // else if entity or another player
+      else {
+      }
+    });
   }
 }

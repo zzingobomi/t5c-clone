@@ -1,4 +1,9 @@
-import { AssetsManager, MeshAssetTask, Scene } from "@babylonjs/core";
+import {
+  AssetsManager,
+  ContainerAssetTask,
+  MeshAssetTask,
+  Scene,
+} from "@babylonjs/core";
 
 export class Environment {
   private _scene: Scene;
@@ -36,6 +41,14 @@ export class Environment {
       },
     ];
 
+    // add races (mesh)
+    assetsToLoad.push({
+      name: "RACE_male_adventurer",
+      filename: "races/male_adventurer.glb",
+      extension: "glb",
+      instantiate: true,
+    });
+
     assetsToLoad.forEach((obj) => {
       let assetTask;
       switch (obj.extension) {
@@ -68,6 +81,8 @@ export class Environment {
 
       assetTask.onSuccess = (task) => {
         switch (task.constructor) {
+          case ContainerAssetTask:
+            this._loadedAssets[task.name] = task.loadedContainer;
           case MeshAssetTask:
             this._loadedAssets[task.name] = task;
             break;

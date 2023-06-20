@@ -1,4 +1,6 @@
 import "@babylonjs/loaders/glTF/2.0/glTFLoader";
+import "@babylonjs/loaders/glTF/2.0/Extensions/KHR_materials_pbrSpecularGlossiness";
+import "@babylonjs/loaders/glTF/2.0/Extensions/KHR_draco_mesh_compression";
 
 import { Engine, Scene } from "@babylonjs/core";
 
@@ -9,11 +11,13 @@ import { LoginScene } from "./Screens/LoginScene";
 import { GameScene } from "./Screens/GameScene";
 
 import Config from "../shared/Config";
+import { Network } from "./Controllers/Network";
 
 class App {
   // babylon
   public canvas;
   public engine: Engine;
+  public client: Network;
   public scene: Scene;
 
   // scene management
@@ -41,6 +45,9 @@ class App {
     // loading
     const loadingScreen = new Loading();
     this.engine.loadingScreen = loadingScreen;
+
+    // create colyseus client
+    this.client = new Network();
 
     // main render loop
     await this._render();

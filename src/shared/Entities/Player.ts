@@ -1,10 +1,19 @@
 import { Scene } from "@babylonjs/core";
 import { Entity } from "./Entity";
 import { PlayerCamera } from "./Player/PlayerCamera";
+import { PlayerSchema } from "../../server/rooms/schema/PlayerSchema";
+import { Room } from "colyseus.js";
 
 export class Player extends Entity {
-  constructor(scene: Scene) {
-    super(scene);
+  constructor(
+    entity: PlayerSchema,
+    room: Room,
+    scene: Scene,
+    _loadedAssets: any[]
+  ) {
+    super(entity, room, scene, _loadedAssets);
+
+    this.type = "player";
 
     this.spawnPlayer();
   }
