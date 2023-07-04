@@ -1,4 +1,4 @@
-import { AssetContainer, Scene } from "@babylonjs/core";
+import { AbstractMesh, AssetContainer, Scene } from "@babylonjs/core";
 import { PlayerCamera } from "./Player/PlayerCamera";
 import { Room } from "colyseus.js";
 import { EntityMesh } from "./Entity/EntityMesh";
@@ -13,6 +13,8 @@ export class Entity {
   public meshController: EntityMesh;
 
   // entity
+  public mesh: AbstractMesh;
+  public playerMesh: AbstractMesh;
   public sessionId: string;
   public entity;
   public isCurrentPlayer: boolean;
@@ -20,6 +22,9 @@ export class Entity {
   // character
   public type: string = "";
   public race: string = "";
+  public x: number;
+  public y: number;
+  public z: number;
 
   constructor(
     entity,

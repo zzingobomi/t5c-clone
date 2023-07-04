@@ -18,4 +18,8 @@ export class PlayerCamera {
 
     this._scene.activeCamera = this.camera;
   }
+
+  public follow(playerPosition, rotationY): void {
+    // TODO: Camera follow
+  }
 }

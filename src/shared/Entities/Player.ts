@@ -20,5 +20,13 @@ export class Player extends Entity {
 
   private async spawnPlayer() {
     this.cameraController = new PlayerCamera(this._scene);
+
+    //////////////////////////////////////////////////////////////////////////
+    // player before render loop
+    //////////////////////////////////////////////////////////////////////////
+    this._scene.registerBeforeRender(() => {
+      // move camera as player moves
+      this.cameraController.follow(this.mesh.position, this.mesh.rotation.y);
+    });
   }
 }
