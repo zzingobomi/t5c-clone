@@ -83,6 +83,7 @@ export class Environment {
         switch (task.constructor) {
           case ContainerAssetTask:
             this._loadedAssets[task.name] = task.loadedContainer;
+            break;
           case MeshAssetTask:
             this._loadedAssets[task.name] = task;
             break;
