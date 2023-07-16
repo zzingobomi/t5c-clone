@@ -5,29 +5,28 @@ import "@babylonjs/loaders/glTF/2.0/Extensions/KHR_draco_mesh_compression";
 import { Engine, Scene } from "@babylonjs/core";
 
 // IMPORT SCREEN
-import State from "./Screens/Screens";
+import State, { Screen } from "./Screens/Screens";
 import { Loading } from "./Controllers/Loading";
 import { LoginScene } from "./Screens/LoginScene";
 import { GameScene } from "./Screens/GameScene";
-
 import Config from "../shared/Config";
 import { Network } from "./Controllers/Network";
 
-class App {
+export class App {
   // babylon
-  public canvas;
+  public canvas: HTMLCanvasElement;
   public engine: Engine;
   public client: Network;
   public scene: Scene;
 
   // scene management
   public state: number = 0;
-  public currentScene;
-  public nextScene;
+  public currentScene: Screen;
+  public nextScene: number;
 
   constructor() {
     // create canvas
-    this.canvas = document.getElementById("renderCanvas");
+    this.canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 
     // initialize babylon scene and engine
     this._init();

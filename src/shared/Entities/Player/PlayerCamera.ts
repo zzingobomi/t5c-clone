@@ -1,7 +1,7 @@
 import { Scene, UniversalCamera, Vector3 } from "@babylonjs/core";
 
 export class PlayerCamera {
-  public camera;
+  public camera: UniversalCamera;
   private _scene: Scene;
 
   constructor(scene: Scene) {
@@ -16,10 +16,15 @@ export class PlayerCamera {
       this._scene
     );
 
+    //this.camera.attachControl();
     this._scene.activeCamera = this.camera;
   }
 
-  public follow(playerPosition, rotationY): void {
-    // TODO: Camera follow
+  public follow(playerPosition: Vector3, rotationY: number): void {
+    // camera must follow player
+    let currentPlayer = playerPosition.y;
+    // FIXME: ytilt 적용하기
+    this.camera.position = new Vector3(0, playerPosition.y + 10, 10);
+    this.camera.setTarget(new Vector3(0, 0, 0));
   }
 }

@@ -8,6 +8,11 @@ export class PlayerSchema extends Schema {
   @type("number") public z: number = 0;
   @type("number") public rot: number = 0;
 
+  @type("string") public sessionId: string;
+  @type("string") public name: string = "";
+  @type("string") public type: string = "player";
+  @type("string") public race: string = "player_hobbit";
+
   // controllers
   public _gameroom;
   public client;

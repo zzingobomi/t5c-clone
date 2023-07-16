@@ -11,17 +11,21 @@ import { Player } from "../../shared/Entities/Player";
 import { Environment } from "../Controllers/Environment";
 import { LocationsDB } from "../../shared/Data/LocationsDB";
 import { Room } from "colyseus.js";
+import { Screen } from "./Screens";
+import { App } from "..";
+import { GameRoomState } from "src/server/rooms/state/GameRoomState";
+import { PlayerSchema } from "src/server/rooms/schema/PlayerSchema";
 
-export class GameScene {
-  private _app;
-  private _scene: Scene;
-  private _environment: Environment;
+export class GameScene implements Screen {
+  _app: App;
+  _scene: Scene;
+  _environment: Environment;
 
-  private room: Room<any>;
-  private _currentPlayer: Player;
-  private _loadedAssets: AssetContainer[] = [];
+  room: Room<GameRoomState>;
+  _currentPlayer: Player;
+  _loadedAssets: AssetContainer[] = [];
 
-  async createScene(app): Promise<void> {
+  async createScene(app: App) {
     this._app = app;
 
     const scene = new Scene(app.engine);
@@ -93,7 +97,7 @@ export class GameScene {
   private async _initEvents() {
     ////////////////////////////////////////////////////
     //  when a entity joins the room event
-    this.room.state.players.onAdd((entity, sessionId) => {
+    this.room.state.players.onAdd((entity: PlayerSchema, sessionId: string) => {
       const isCurrentPlayer = sessionId === this.room.sessionId;
 
       //////////////////

@@ -1,3 +1,12 @@
+import { Scene } from "@babylonjs/core";
+import { App } from "../index";
+
+export interface Screen {
+  _scene: Scene;
+
+  createScene: (app: App) => Promise<void>;
+}
+
 enum State {
   NULL = 0,
   LOGIN = 1,

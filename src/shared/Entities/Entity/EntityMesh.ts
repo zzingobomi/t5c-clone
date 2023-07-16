@@ -1,19 +1,25 @@
-import { Mesh, MeshBuilder, Scene } from "@babylonjs/core";
+import {
+  Node,
+  Mesh,
+  MeshBuilder,
+  AssetContainer,
+  Scene,
+} from "@babylonjs/core";
 import { Matrix, Vector3 } from "@babylonjs/core/Maths/math";
+import { Room } from "colyseus.js";
 import { Entity } from "../Entity";
 
 export class EntityMesh {
   private _entity: Entity;
   private _scene: Scene;
-  private _loadedAssets;
-  private _room;
+  private _loadedAssets: AssetContainer[];
+  private _room: Room;
   public mesh: Mesh;
-  public playerMesh;
+  public playerMesh: Node;
   public isCurrentPlayer: boolean;
 
   constructor(entity: Entity) {
     this._entity = entity;
-    this._entity.race = "male_adventurer";
     this._scene = entity._scene;
     this._loadedAssets = entity._loadedAssets;
     this.isCurrentPlayer = entity.isCurrentPlayer;
@@ -42,12 +48,23 @@ export class EntityMesh {
       this._entity.z
     );
 
+    this.mesh.metadata = {
+      sessionId: this._entity.sessionId,
+      type: this._entity.type,
+      race: this._entity.race,
+      name: this._entity.name,
+    };
+
     // load player mesh
-    const result =
-      this._loadedAssets[
-        `RACE_${this._entity.race}`
-      ].instantiateModelsToScene();
+    const result = (
+      this._loadedAssets[`RACE_${this._entity.race}`] as AssetContainer
+    ).instantiateModelsToScene();
 
     const playerMesh = result.rootNodes[0];
+
+    // set initial player scale & rotation
+    playerMesh.name = `${this._entity.sessionId}_mesh`;
+    playerMesh.parent = box;
+    this.playerMesh = playerMesh;
   }
 }

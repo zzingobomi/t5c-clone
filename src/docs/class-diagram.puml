@@ -1,0 +1,113 @@
+@startuml
+title Class Diagram
+
+class App {
+  .. babylon ..
+  canvas: HTMLCanvasElement
+  engine: Engine
+  client: Network
+  scene: Scene
+
+  .. scene management ..
+  state: number
+  currentScene: Screen
+  nextScene: number
+}
+
+interface Screen {
+  _scene: Scene
+  createScene: (app: App) => Promise<void>
+}
+
+class LoginScene {
+  _scene: Scene
+  createScene(app: App)
+}
+
+class GameScene {
+  _app: App
+  _scene: Scene
+  _environment: Environment
+
+  room: Room<GameRoomState>
+  _currentPlayer: Player
+   _loadedAssets: AssetContainer[]
+
+  createScene(app: App)
+  _initNetwork()
+  _initEvents()
+}
+
+class Environment {
+  _scene: Scene
+  _assetsManager: AssetsManager
+  _loadedAssets: AssetContainer[]
+  _loadingTxt: HTMLDivElement
+
+  loadNavMesh()
+  loadAssets()
+}
+
+class Entity {
+  _scene: Scene
+  _room: Room
+  _loadedAssets: AssetContainer[]
+
+  .. Controllers ..
+  cameraController: PlayerCamera
+  meshController: EntityMesh
+
+  .. Entity ..
+  mesh: AbstractMesh
+  playerMesh: AbstractMesh
+  sessionId: string
+  entity: PlayerSchema
+  isCurrentPlayer: boolean
+
+  .. Character ..
+  type: string
+  race: string
+  name: string
+  x: number
+  y: number
+  z: number
+
+  spawn(entity)
+}
+
+class EntityMesh {
+  _entity: Entity
+  _scene: Scene
+  _loadedAssets: AssetContainer[]
+  _room: Room
+  mesh: Mesh
+  playerMesh: Node
+  isCurrentPlayer: boolean
+
+  load()
+}
+
+class Player {
+  spawnPlayer() 
+}
+
+class PlayerCamera {
+  camera: UniversalCamera
+  _scene: Scene
+
+  _build()
+  follow(playerPosition, rotationY)
+}
+
+App *-- Screen
+LoginScene <|-- Screen
+GameScene <|-- Screen
+
+Environment *-- GameScene
+
+Entity *-- EntityMesh
+Entity *-- PlayerCamera
+Player <|-- Entity
+GameScene *-- Player
+
+@enduml

@@ -1,4 +1,4 @@
-import { Scene } from "@babylonjs/core";
+import { AssetContainer, Scene } from "@babylonjs/core";
 import { Entity } from "./Entity";
 import { PlayerCamera } from "./Player/PlayerCamera";
 import { PlayerSchema } from "../../server/rooms/schema/PlayerSchema";
@@ -9,7 +9,7 @@ export class Player extends Entity {
     entity: PlayerSchema,
     room: Room,
     scene: Scene,
-    _loadedAssets: any[]
+    _loadedAssets: AssetContainer[]
   ) {
     super(entity, room, scene, _loadedAssets);
 

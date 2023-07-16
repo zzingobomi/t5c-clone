@@ -1,4 +1,5 @@
 import {
+  AssetContainer,
   AssetsManager,
   ContainerAssetTask,
   MeshAssetTask,
@@ -8,13 +9,15 @@ import {
 export class Environment {
   private _scene: Scene;
   private _assetsManager: AssetsManager;
-  private _loadedAssets;
-  private _loadingTxt;
+  private _loadedAssets: AssetContainer[];
+  private _loadingTxt: HTMLDivElement;
 
-  constructor(scene: Scene, _loadedAssets) {
+  constructor(scene: Scene, _loadedAssets: AssetContainer[]) {
     this._scene = scene;
     this._loadedAssets = _loadedAssets;
-    this._loadingTxt = window.document.getElementById("loadingTextDetails");
+    this._loadingTxt = window.document.getElementById(
+      "loadingTextDetails"
+    ) as HTMLDivElement;
 
     this._assetsManager = new AssetsManager(scene);
   }
@@ -113,7 +116,6 @@ export class Environment {
     };
 
     this._assetsManager.onFinish = () => {
-      console.log("loading complete", this._loadedAssets);
       this.showLoadingMessage("100%");
     };
 

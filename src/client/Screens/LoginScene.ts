@@ -1,12 +1,13 @@
 import { Color4, FreeCamera, Scene, Vector3 } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Button, Rectangle } from "@babylonjs/gui";
 import { SceneController } from "../Controllers/Scene";
-import State from "./Screens";
+import State, { Screen } from "./Screens";
+import { App } from "..";
 
-export class LoginScene {
-  public _scene: Scene;
+export class LoginScene implements Screen {
+  _scene: Scene;
 
-  public async createScene(app) {
+  public async createScene(app: App) {
     const scene = new Scene(app.engine);
     scene.clearColor = new Color4(0, 0, 0, 1);
 
