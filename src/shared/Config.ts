@@ -4,6 +4,7 @@ const Config = {
   // server settings
   port: 3000,
   maxClients: 20,
+  updateRate: 100, // Set frequency the patched state should be sent to all clients, in milliseconds
   logLevel: "info",
 
   // basic locations

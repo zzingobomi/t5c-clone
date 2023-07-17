@@ -88,6 +88,7 @@ export class App {
   setDefault() {
     global.T5C = {
       nextScene: Config.defaultScene,
+      camY: 0,
     };
   }
 

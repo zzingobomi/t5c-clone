@@ -14,6 +14,15 @@ export class GameRoomState extends Schema {
     this._gameroom = gameroom;
   }
 
+  public update(deltaTime: number) {
+    // for each players
+    if (this.players.size > 0) {
+      this.players.forEach((player) => {
+        player.update();
+      });
+    }
+  }
+
   /**
    * Add Player
    * @param sessionId

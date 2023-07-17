@@ -13,17 +13,25 @@ import { LocationsDB } from "../../shared/Data/LocationsDB";
 import { Room } from "colyseus.js";
 import { Screen } from "./Screens";
 import { App } from "..";
+import { PlayerInput } from "../Controllers/PlayerInput";
 import { GameRoomState } from "src/server/rooms/state/GameRoomState";
 import { PlayerSchema } from "src/server/rooms/schema/PlayerSchema";
+import { PlayerInputs } from "src/shared/types";
+import Config from "../../shared/Config";
+import { Entity } from "../../shared/Entities/Entity";
 
 export class GameScene implements Screen {
   _app: App;
   _scene: Scene;
+  _input: PlayerInput;
   _environment: Environment;
 
   room: Room<GameRoomState>;
   _currentPlayer: Player;
   _loadedAssets: AssetContainer[] = [];
+
+  // network entities
+  private _entities: (Player | Entity)[] = [];
 
   async createScene(app: App) {
     this._app = app;
@@ -95,6 +103,8 @@ export class GameScene implements Screen {
   }
 
   private async _initEvents() {
+    this._input = new PlayerInput(this._scene);
+
     ////////////////////////////////////////////////////
     //  when a entity joins the room event
     this.room.state.players.onAdd((entity: PlayerSchema, sessionId: string) => {
@@ -113,11 +123,70 @@ export class GameScene implements Screen {
 
         this._currentPlayer = _player;
 
+        this._entities[sessionId] = _player;
+
         this._app.engine.hideLoadingUI();
       }
       //////////////////
       // else if entity or another player
       else {
+        this._entities[sessionId] = new Entity(
+          entity,
+          this.room,
+          this._scene,
+          this._loadedAssets
+        );
+      }
+    });
+
+    /////////////////////////////////////////////////////////////
+    ////////////////////  REMOVING EVENTS  //////////////////
+    /////////////////////////////////////////////////////////////
+    this.room.state.players.onRemove((player, sessionId) => {
+      if (this._entities[sessionId]) {
+        // TODO:
+        //this._entities[sessionId].remove();
+        delete this._entities[sessionId];
+      }
+    });
+
+    ////////////////////////////////////////////////////
+    // main game loop
+    let timeThen = Date.now();
+    let sequence = 0;
+    let latestInput: PlayerInputs;
+    this._scene.registerBeforeRender(() => {
+      let delta = this._app.engine.getFps();
+
+      // entities update
+      for (let sessionId in this._entities) {
+        const entity = this._entities[sessionId];
+        entity.update(delta);
+      }
+
+      /////////////////
+      // server update rate
+      // every 100ms loop
+      let timeNow = Date.now();
+      let timePassed = (timeNow - timeThen) / 1000;
+      let updateRate = Config.updateRate / 1000;
+      if (timePassed >= updateRate) {
+        // detect movement
+        if (this._input.playerCanMove) {
+          sequence++;
+
+          latestInput = {
+            seq: sequence,
+            h: this._input.horizontal,
+            v: this._input.vertical,
+          };
+
+          this.room.send("playerInput", latestInput);
+
+          // TODO: do client side prediction
+        }
+
+        timeThen = timeNow;
       }
     });
   }

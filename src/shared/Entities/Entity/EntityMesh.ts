@@ -4,6 +4,7 @@ import {
   MeshBuilder,
   AssetContainer,
   Scene,
+  AbstractMesh,
 } from "@babylonjs/core";
 import { Matrix, Vector3 } from "@babylonjs/core/Maths/math";
 import { Room } from "colyseus.js";
@@ -15,7 +16,7 @@ export class EntityMesh {
   private _loadedAssets: AssetContainer[];
   private _room: Room;
   public mesh: Mesh;
-  public playerMesh: Node;
+  public playerMesh: AbstractMesh;
   public isCurrentPlayer: boolean;
 
   constructor(entity: Entity) {
@@ -65,6 +66,6 @@ export class EntityMesh {
     // set initial player scale & rotation
     playerMesh.name = `${this._entity.sessionId}_mesh`;
     playerMesh.parent = box;
-    this.playerMesh = playerMesh;
+    this.playerMesh = playerMesh as AbstractMesh;
   }
 }
