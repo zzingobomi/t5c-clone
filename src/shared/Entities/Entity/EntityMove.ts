@@ -28,25 +28,23 @@ export class EntityMove {
   }
 
   public tween() {
-    this._mesh.position = this.nextPosition;
-    this._mesh.rotation = this.nextRotation;
-    // // continuously lerp between current position and next position
-    // this._mesh.position = Vector3.Lerp(
-    //   this._mesh.position,
-    //   this.nextPosition,
-    //   0.15
-    // );
+    // continuously lerp between current position and next position
+    this._mesh.position = Vector3.Lerp(
+      this._mesh.position,
+      this.nextPosition,
+      0.15
+    );
 
-    // // rotation
-    // // TODO : make it better
-    // // maybe look into Scalar.LerpAngle ??? https://doc.babylonjs.com/typedoc/classes/BABYLON.Scalar#LerpAngle
-    // const gap = Math.abs(this._mesh.rotation.y - this.nextRotation.y);
-    // if (gap > Math.PI) this._mesh.rotation.y = this.nextRotation.y;
-    // else
-    //   this._mesh.rotation = Vector3.Lerp(
-    //     this._mesh.rotation,
-    //     this.nextRotation,
-    //     0.8
-    //   );
+    // rotation
+    // TODO : make it better
+    // maybe look into Scalar.LerpAngle ??? https://doc.babylonjs.com/typedoc/classes/BABYLON.Scalar#LerpAngle
+    const gap = Math.abs(this._mesh.rotation.y - this.nextRotation.y);
+    if (gap > Math.PI) this._mesh.rotation.y = this.nextRotation.y;
+    else
+      this._mesh.rotation = Vector3.Lerp(
+        this._mesh.rotation,
+        this.nextRotation,
+        0.8
+      );
   }
 }

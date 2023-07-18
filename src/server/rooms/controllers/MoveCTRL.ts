@@ -25,13 +25,13 @@ export class MoveCTRL {
     let oldX = this._owner.x;
     let oldY = this._owner.y;
     let oldZ = this._owner.z;
-    //let oldRot = this._owner.rot;
+    let oldRot = this._owner.rot;
 
     // caculate new position
     let newX = this._owner.x - playerInput.h * speed;
     let newY = this._owner.y;
     let newZ = this._owner.z - playerInput.v * speed;
-    //let newRot = Math.atan2(playerInput.h, playerInput.v);
+    let newRot = Math.atan2(playerInput.h, playerInput.v);
 
     // check if destination is in navmesh
     let sourcePos = new Vector3(oldX, oldY, oldZ);
@@ -42,7 +42,7 @@ export class MoveCTRL {
       this._owner.x = newX;
       this._owner.y = newY;
       this._owner.z = newZ;
-      //this._owner.rot = newRot;
+      this._owner.rot = newRot;
 
       // Logger.info(
       //   `Valid position for ${this._owner.name} :
@@ -53,7 +53,7 @@ export class MoveCTRL {
       this._owner.x = oldX;
       this._owner.y = 0;
       this._owner.z = oldZ;
-      //this._owner.rot = oldRot;
+      this._owner.rot = oldRot;
 
       // Logger.info(
       //   `Invalid position for ${this._owner.name} :
